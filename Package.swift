@@ -12,7 +12,7 @@ let package = Package(
 		.Package(url: "https://github.com/iamjono/JSONConfig.git", majorVersion: 1),
 		.Package(url: "https://github.com/PerfectlySoft/Perfect-RequestLogger.git", majorVersion: 1),
 		.Package(url: "https://github.com/PerfectlySoft/Perfect-SMTP", majorVersion: 1),
-		.Package(url: "https://github.com/ryancoyne/Postgres-StORM.git", majorVersion: 1),
+		.Package(url: "https://github.com/ryancoyne/Postgres-StORM-ryan.git", majorVersion: 1),
 		.Package(url: "https://github.com/PerfectlySoft/Perfect-Session-PostgreSQL.git", majorVersion: 1),
 		.Package(url: "https://github.com/PerfectlySoft/Perfect-Mustache.git", majorVersion: 2),
 		]
