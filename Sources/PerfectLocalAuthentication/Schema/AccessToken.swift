@@ -36,7 +36,7 @@ public class AccessToken: PostgresStORM {
 	}
 
 
-	public override init(){}
+    public required init(){}
 
 	// no clientid
 	public init(userid u: String, expiration: Int, scope s: [String] = [String]()) {

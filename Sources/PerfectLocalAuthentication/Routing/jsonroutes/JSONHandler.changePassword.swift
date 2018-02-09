@@ -18,6 +18,7 @@ import PerfectCrypto
 import PerfectSessionPostgreSQL
 
 
+
 extension LocalAuthJSONHandlers {
 
 	// POST request for current user change password
@@ -25,7 +26,7 @@ extension LocalAuthJSONHandlers {
 		return {
 			request, response in
 			if let i = request.session?.userid, !i.isEmpty {
-				let acc = Account()
+                let acc = Account<CustomAccount>()
 				do {
 					try acc.get(i)
 

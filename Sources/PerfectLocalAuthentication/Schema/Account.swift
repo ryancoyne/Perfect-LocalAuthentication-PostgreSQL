@@ -11,7 +11,13 @@ import PostgresStORM
 import SwiftRandom
 import PerfectSMTP
 
-public class Account: PostgresStORM {
+class CustomAccount: PostgresStORM {
+    var firstName : String?
+    var lastName : String?
+    var phoneNumber : String?
+}
+
+public class Account<UserExtension : PostgresStORM>: PostgresStORM {
 	public var id			  = ""
 	public var username		  = ""
 	public var password		  = ""
@@ -21,6 +27,8 @@ public class Account: PostgresStORM {
 	public var remoteid		  = ""		// if oauth then the sourceid is stored here
 	public var passvalidation = ""
     public var passreset      = ""
+    
+    public var detailModel = UserExtension()
 
 	public var detail		  = [String:Any]()
 
@@ -28,7 +36,9 @@ public class Account: PostgresStORM {
 
 	public static func setup(_ str: String = "") {
 		do {
-			let obj = Account()
+            
+            let obj = self.init()
+            
 			try obj.setup(str)
 
 			// Account migrations:
@@ -43,6 +53,7 @@ public class Account: PostgresStORM {
 	}
 
 	override public func to(_ this: StORMRow) {
+        
 		id              = this.data["id"] as? String				?? ""
 		username		= this.data["username"] as? String			?? ""
 		password        = this.data["password"] as? String			?? ""
@@ -52,7 +63,12 @@ public class Account: PostgresStORM {
 		remoteid        = this.data["remoteid"] as? String			?? ""
 		passvalidation	= this.data["passvalidation"] as? String	?? ""
         passreset       = this.data["passreset"] as? String         ?? ""
-
+        
+        // Fill the custom detail model (we store the mirrored values
+        let customDetail = UserExtension()
+        customDetail.to(this)
+        detailModel = customDetail
+        
 		if let detailObj = this.data["detail"] {
 			self.detail = detailObj as? [String:Any] ?? [String:Any]()
 		}
@@ -61,18 +77,18 @@ public class Account: PostgresStORM {
 	public func rows() -> [Account] {
 		var rows = [Account]()
 		for i in 0..<self.results.rows.count {
-			let row = Account()
+			let row = Account<UserExtension>()
 			row.to(self.results.rows[i])
 			rows.append(row)
 		}
 		return rows
 	}
 
-	public override init() {
+    public required init() {
 		super.init()
 	}
 
-	public init(
+	public required init(
 		_ i: String = "",
 		_ u: String,
 		_ p: String = "",
@@ -81,7 +97,10 @@ public class Account: PostgresStORM {
 		_ s: String = "local",
 		_ rid: String = ""
 		) {
+        
 		super.init()
+        
+        detailModel = UserExtension()
 		id = i
 		username = u
 		password = p
@@ -91,6 +110,7 @@ public class Account: PostgresStORM {
         passreset = _r.secureToken
 		source = s
 		remoteid = rid
+        
 	}
 
 	public init(validation: String) {
@@ -134,7 +154,8 @@ public class Account: PostgresStORM {
 	// Register User
 	public static func register(_ u: String, _ e: String, _ ut: AccountType = .provisional, baseURL: String) -> OAuth2ServerError {
 		let r = URandom()
-		let acc = Account(r.secureToken, u, "", e, ut)
+//        let acc = Account(r.secureToken, u, "", e, ut)
+		let acc = self.init(r.secureToken, u, "", e, ut)
 		do {
 			try acc.isUnique()
 			//			print("passed unique test")
@@ -162,7 +183,7 @@ public class Account: PostgresStORM {
     /// - Parameter baseURL: base url to create the reset pass url
     public static func resetPassword(_ e: String, baseURL: String) -> OAuth2ServerError {
         let r = URandom()
-        let acc = Account()
+        let acc = self.init()
         do {
             try acc.find(["email": e])
             acc.passreset = r.secureToken
@@ -191,7 +212,7 @@ public class Account: PostgresStORM {
 			let hexBytes = digestBytes.encode(.hex),
 			let hexBytesStr = String(validatingUTF8: hexBytes) {
 
-			let acc = Account()
+			let acc = self.init()
 			let criteria = ["username":u,"password":hexBytesStr]
 			do {
 				try acc.find(criteria)
@@ -210,7 +231,7 @@ public class Account: PostgresStORM {
 
 	public static func listUsers() -> [[String: Any]] {
 		var users = [[String: Any]]()
-		let t = Account()
+		let t = self.init()
 		let cursor = StORMCursor(limit: 9999999,offset: 0)
 		try? t.select(
 			columns: [],

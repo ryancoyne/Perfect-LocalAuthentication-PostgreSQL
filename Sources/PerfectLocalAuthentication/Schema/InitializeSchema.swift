@@ -55,9 +55,12 @@ public func initializeSchema(_ fname: String = "./config/ApplicationConfiguratio
 //	StORMdebug = true
 
 	// Account
-	PostgresConnector.quiet = true
-	Account.setup()
-	PostgresConnector.quiet = false
+//    PostgresConnector.quiet = true
+    
+    // The new way we will setup the account table:
+	Account<CustomAccount>.setup()
+    
+//    PostgresConnector.quiet = false
 
 
 	return opts
