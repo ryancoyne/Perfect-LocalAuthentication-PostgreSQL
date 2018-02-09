@@ -28,7 +28,7 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
 	public var passvalidation = ""
     public var passreset      = ""
     
-    public var detailModel = UserExtension()
+    public var detailModel : UserExtension?
 
 	public var detail		  = [String:Any]()
 
@@ -65,9 +65,11 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
         passreset       = this.data["passreset"] as? String         ?? ""
         
         // Fill the custom detail model (we store the mirrored values
-        let customDetail = UserExtension()
-        customDetail.to(this)
-        detailModel = customDetail
+        if !(UserExtension is PostgresStORM) {
+            let customDetail = UserExtension()
+            customDetail.to(this)
+            detailModel = customDetail
+        }
         
 		if let detailObj = this.data["detail"] {
 			self.detail = detailObj as? [String:Any] ?? [String:Any]()
@@ -99,8 +101,9 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
 		) {
         
 		super.init()
-        
-        detailModel = UserExtension()
+        if !(UserExtension is PostgresStORM) {
+            detailModel = UserExtension()
+        }
 		id = i
 		username = u
 		password = p
