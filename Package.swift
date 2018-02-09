@@ -4,7 +4,7 @@ let package = Package(
     name: "Perfect-LocalAuthentication-PostgreSQL",
     targets: [
 		Target(
-			name: "LocalAuthentication",
+			name: "PerfectLocalAuthentication",
 			dependencies: []
 		)
 		],
