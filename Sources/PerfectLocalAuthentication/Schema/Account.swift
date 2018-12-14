@@ -8,7 +8,6 @@
 
 import StORM
 import PostgresStORM
-import SwiftRandom
 import PerfectSMTP
 
 class CustomAccount: PostgresStORM {
@@ -31,8 +30,6 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
     public var detailModel : UserExtension?
 
 	public var detail		  = [String:Any]()
-
-	let _r = URandom()
 
 	public static func setup(_ str: String = "") {
 		do {
@@ -109,8 +106,8 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
 		password = p
 		email = e
 		usertype = ut
-		passvalidation = _r.secureToken
-        passreset = _r.secureToken
+		passvalidation = AccessToken.generate()
+		passreset = AccessToken.generate()
 		source = s
 		remoteid = rid
         
@@ -127,7 +124,7 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
     }
 
 	public func makeID() {
-		id = _r.secureToken
+		id = AccessToken.generate()
 	}
 
 	public func makePassword(_ p1: String) {
@@ -156,9 +153,13 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
 
 	// Register User
 	public static func register(_ u: String, _ e: String, _ ut: AccountType = .provisional, baseURL: String) -> OAuth2ServerError {
+<<<<<<< HEAD
 		let r = URandom()
 //        let acc = Account(r.secureToken, u, "", e, ut)
 		let acc = self.init(r.secureToken, u, "", e, ut)
+=======
+		let acc = Account(AccessToken.generate(), u, "", e, ut)
+>>>>>>> upstream/master
 		do {
 			try acc.isUnique()
 			//			print("passed unique test")
@@ -185,11 +186,15 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
     /// - Parameter e: email address
     /// - Parameter baseURL: base url to create the reset pass url
     public static func resetPassword(_ e: String, baseURL: String) -> OAuth2ServerError {
+<<<<<<< HEAD
         let r = URandom()
         let acc = self.init()
+=======
+        let acc = Account()
+>>>>>>> upstream/master
         do {
             try acc.find(["email": e])
-            acc.passreset = r.secureToken
+            acc.passreset = AccessToken.generate()
             acc.email = e
             try acc.save()
         } catch {
