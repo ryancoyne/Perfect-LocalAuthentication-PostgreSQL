@@ -17,6 +17,7 @@ class CustomAccount: PostgresStORM {
 }
 
 public class Account<UserExtension : PostgresStORM>: PostgresStORM {
+    
 	public var id			  = ""
 	public var username		  = ""
 	public var password		  = ""
@@ -62,11 +63,11 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
         passreset       = this.data["passreset"] as? String         ?? ""
         
         // Fill the custom detail model (we store the mirrored values
-        if !(UserExtension is PostgresStORM) {
-            let customDetail = UserExtension()
-            customDetail.to(this)
-            detailModel = customDetail
-        }
+        
+        let customDetail = UserExtension()
+        customDetail.to(this)
+        detailModel = customDetail
+        
         
 		if let detailObj = this.data["detail"] {
 			self.detail = detailObj as? [String:Any] ?? [String:Any]()
@@ -98,9 +99,8 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
 		) {
         
 		super.init()
-        if !(UserExtension is PostgresStORM) {
-            detailModel = UserExtension()
-        }
+        
+        detailModel = UserExtension()
 		id = i
 		username = u
 		password = p
@@ -153,13 +153,7 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
 
 	// Register User
 	public static func register(_ u: String, _ e: String, _ ut: AccountType = .provisional, baseURL: String) -> OAuth2ServerError {
-<<<<<<< HEAD
-		let r = URandom()
-//        let acc = Account(r.secureToken, u, "", e, ut)
-		let acc = self.init(r.secureToken, u, "", e, ut)
-=======
 		let acc = Account(AccessToken.generate(), u, "", e, ut)
->>>>>>> upstream/master
 		do {
 			try acc.isUnique()
 			//			print("passed unique test")
@@ -186,12 +180,7 @@ public class Account<UserExtension : PostgresStORM>: PostgresStORM {
     /// - Parameter e: email address
     /// - Parameter baseURL: base url to create the reset pass url
     public static func resetPassword(_ e: String, baseURL: String) -> OAuth2ServerError {
-<<<<<<< HEAD
-        let r = URandom()
-        let acc = self.init()
-=======
         let acc = Account()
->>>>>>> upstream/master
         do {
             try acc.find(["email": e])
             acc.passreset = AccessToken.generate()
