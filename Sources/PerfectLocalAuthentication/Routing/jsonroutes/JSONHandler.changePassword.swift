@@ -26,7 +26,7 @@ extension LocalAuthJSONHandlers {
 		return {
 			request, response in
 			if let i = request.session?.userid, !i.isEmpty {
-                let acc = Account<CustomAccount>()
+                let acc = Account()
 				do {
 					try acc.get(i)
 
@@ -41,7 +41,7 @@ extension LocalAuthJSONHandlers {
 								response.completed()
 								return
 							} else {
-								LocalAuthHandlers.error(request, response, error: "Please supply a vaid password", code: .badRequest)
+								LocalAuthHandlers.error(request, response, error: "Please supply a valid password", code: .badRequest)
 								return
 							}
 						} catch {

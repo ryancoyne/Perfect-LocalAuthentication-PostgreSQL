@@ -48,7 +48,7 @@ fileprivate func performSetup(){
 //    StORMdebug = true
     // Account
     PostgresConnector.quiet = true
-    Account<CustomAccount>.setup()
+    Account.setup()
     PostgresConnector.quiet = false
 }
 
