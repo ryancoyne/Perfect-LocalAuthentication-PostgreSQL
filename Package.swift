@@ -15,8 +15,8 @@ let package = Package(
             url: "https://github.com/iamjono/JSONConfig.git",
             from: "3.0.0"),
         .package(
-            url: "https://github.com/PerfectlySoft/Perfect-RequestLogger.git",
-            from: "3.0.0"),
+            url: "https://github.com/ryancoyne/Perfect-RequestLogger.git",
+            from: "4.0.0"),
         .package(
             url: "https://github.com/PerfectlySoft/Perfect-SMTP.git",
             from: "3.0.0"),
@@ -24,8 +24,8 @@ let package = Package(
             url: "https://github.com/ryancoyne/Postgres-StORM-ryan.git",
             from: "4.0.0"),
         .package(
-            url: "https://github.com/PerfectlySoft/Perfect-Session-PostgreSQL.git",
-            from: "3.0.0"),
+            url: "https://github.com/ryancoyne/Perfect-Session-PostgreSQL.git",
+            from: "4.0.0"),
         .package(
             url: "https://github.com/PerfectlySoft/Perfect-Mustache.git",
             from: "3.0.0"),
