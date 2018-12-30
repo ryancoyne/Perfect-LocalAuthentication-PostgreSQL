@@ -1,21 +1,43 @@
+// swift-tools-version:4.0
+
 import PackageDescription
-
 let package = Package(
-    name: "Perfect-LocalAuthentication-PostgreSQL",
-    targets: [
-		Target(
-			name: "PerfectLocalAuthentication",
-			dependencies: []
-		)
-		],
+    name: "PerfectLocalAuthentication",
+    products: [
+        // Products define the executables and libraries produced by a package, and make them visible to other packages.
+        .library(
+            name: "PerfectLocalAuthentication",
+            targets: ["PerfectLocalAuthentication"]
+        ),
+    ],
     dependencies: [
-		.Package(url: "https://github.com/iamjono/JSONConfig.git", majorVersion: 3),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-RequestLogger.git", majorVersion: 3),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-SMTP.git", majorVersion: 3),
-		.Package(url: "https://github.com/ryancoyne/Postgres-StORM-ryan.git", majorVersion: 3),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-Session-PostgreSQL.git", majorVersion: 3),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-Mustache.git", majorVersion: 3),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-HTTP.git", majorVersion: 3),
-	]
-
+        .package(
+            url: "https://github.com/iamjono/JSONConfig.git",
+            from: "3.0.0"),
+        .package(
+            url: "https://github.com/PerfectlySoft/Perfect-RequestLogger.git",
+            from: "3.0.0"),
+        .package(
+            url: "https://github.com/PerfectlySoft/Perfect-SMTP.git",
+            from: "3.0.0"),
+        .package(
+            url: "https://github.com/ryancoyne/Postgres-StORM-ryan.git",
+            from: "4.0.0"),
+        .package(
+            url: "https://github.com/PerfectlySoft/Perfect-Session-PostgreSQL.git",
+            from: "3.0.0"),
+        .package(
+            url: "https://github.com/PerfectlySoft/Perfect-Mustache.git",
+            from: "3.0.0"),
+        .package(
+            url: "https://github.com/PerfectlySoft/Perfect-HTTP.git",
+            from: "3.0.0"),
+    ],
+    targets: [
+        .target(
+            name: "PerfectLocalAuthentication",
+            dependencies: ["JSONConfig", "PerfectRequestLogger", "PerfectSMTP", "PostgresStORM", "PerfectSessionPostgreSQL", "PerfectMustache", "PerfectHTTP"],
+            path: "Sources/PerfectLocalAuthentication"
+        ),
+    ]
 )
